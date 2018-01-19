@@ -708,7 +708,8 @@ contains
     !STEP 0 
     ! 2.1 get cell-centered phi so we can compute a pointwise, fourth order gradient at faces
     ! needed  for diffusive fluxes
-
+!$omp target map(tofrom:flxx,flxy,flxz) map(to:lo,hi,phi,phiptcc,phiavex,phiavey,phiavez,phiptx,phipty,phiptz) 
+!$omp parallel do collapse(3) 
     do       k = lo(3)-3, hi(3)+3
        do    j = lo(2)-3, hi(2)+3
           do i = lo(1)-3, hi(1)+3
@@ -720,8 +721,10 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
     ! STEP ONE--- HYPERBOLIC FLUXES
     ! compute face average phi on x faces via eqn 17 of mccorquodale, colella
+!$omp parallel do collapse(3) 
     do       k = lo(3)-2, hi(3)+2
        do    j = lo(2)-2, hi(2)+2
           do i = lo(1)  , hi(1)+1
@@ -733,8 +736,10 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
     !same for y faces
+!$omp parallel do collapse(3) 
     do       k = lo(3)-2, hi(3)+2
        do    j = lo(2)  , hi(2)+1
           do i = lo(1)-2, hi(1)+2
@@ -746,7 +751,9 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
     !same for z faces
+!$omp parallel do collapse(3) 
     do       k = lo(3)  , hi(3)+1
        do    j = lo(2)-2, hi(2)+2
           do i = lo(1)-2, hi(1)+2
@@ -758,12 +765,14 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
     !now get point valued phi at faces so we can multiply by point valued velocity
     ! phipt = phiave - (h^2/24)*(lapl^2d(phi_ave))
     ! while I am at it, multiply in pointwise velocity so we get pointwise *HYPERBOLIC* flux
     !also  get pointwise diffusive fluxes using 4th order finite differences of pointwise phi
 
+!$omp parallel do collapse(3) 
     do       k = lo(3)-1, hi(3)+1
        do    j = lo(2)-1, hi(2)+1
           do i = lo(1)  , hi(1)+1
@@ -781,8 +790,10 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
     !same for y faces
+!$omp parallel do collapse(3) 
     do       k = lo(3)-1, hi(3)+1
        do    j = lo(2)  , hi(2)+1
           do i = lo(1)-1, hi(1)+1
@@ -801,8 +812,10 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
     !same for z faces
+!$omp parallel do collapse(3) 
     do       k = lo(3)  , hi(3)+1
        do    j = lo(2)-1, hi(2)+1
           do i = lo(1)-1, hi(1)+1
@@ -820,10 +833,12 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
     ! now transform pointwise  fluxes into face-averaged  fluxes
     !fluxave = fluxpt + (1/24)(Lapl2d(fluxpt))
 
+!$omp parallel do collapse(3) 
     do       k = lo(3), hi(3)
        do    j = lo(2), hi(2)
           do i = lo(1), hi(1)+1
@@ -834,7 +849,9 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
+!$omp parallel do collapse(3) 
     do       k = lo(3), hi(3)
        do    j = lo(2), hi(2)+1
           do i = lo(1), hi(1)
@@ -845,7 +862,9 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
 
+!$omp parallel do collapse(3) 
     do       k = lo(3), hi(3)+1
        do    j = lo(2), hi(2)
           do i = lo(1), hi(1)
@@ -856,6 +875,8 @@ contains
           end do
        end do
     end do
+!$omp end parallel do
+!$omp end target 
  
  end subroutine mol4thord_flux_3d_limited
 

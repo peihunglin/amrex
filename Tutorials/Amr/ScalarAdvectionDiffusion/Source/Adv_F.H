@@ -36,7 +36,7 @@ extern "C"
 				BL_FORT_FAB_ARG(zvel)),
 			 const amrex_real* dx, const amrex_real* problo);
   
-  void advectDiffGodunov(const amrex_real& time, const int* lo, const int*hi,
+  void advectDiffGodunov_F(const amrex_real& time, const int* lo, const int*hi,
                          const BL_FORT_FAB_ARG_3D(statein),
                          BL_FORT_FAB_ARG_3D(dphidtout),
                          AMREX_D_DECL(const BL_FORT_FAB_ARG_3D(xvel),
@@ -50,7 +50,7 @@ extern "C"
                          const int* uselimit
     );
 
-  void advectDiffMOL2ndOrd(const amrex_real& time, const int* lo, const int*hi,
+  void advectDiffMOL2ndOrd_F(const amrex_real& time, const int* lo, const int*hi,
                            const BL_FORT_FAB_ARG_3D(statein),
                            BL_FORT_FAB_ARG_3D(dphidtout),
                            AMREX_D_DECL(const BL_FORT_FAB_ARG_3D(xvel),
@@ -64,7 +64,7 @@ extern "C"
                            const int* uselimit);
 
 
-  void advectDiffMOL4thOrd(const amrex_real& time, const int* lo, const int*hi,
+  void advectDiffMOL4thOrd_F(const amrex_real& time, const int* lo, const int*hi,
                            const BL_FORT_FAB_ARG_3D(statein),
                            BL_FORT_FAB_ARG_3D(dphidtout),
                            AMREX_D_DECL(const BL_FORT_FAB_ARG_3D(xvel),

@@ -494,7 +494,7 @@ namespace amrex
     }
 
 
-    if(m_use_fixed_dt);
+    if(m_use_fixed_dt)
     {
       dtval = m_fixed_dt;
     }
@@ -935,7 +935,7 @@ namespace amrex
                                        BL_TO_FORTRAN(uface[2])),
                           dx, prob_lo);
 
-        advectDiffGodunov(time, bx.loVect(), bx.hiVect(),
+        advectDiffGodunov_F(time, bx.loVect(), bx.hiVect(),
                           BL_TO_FORTRAN_3D(statein), 
                           BL_TO_FORTRAN_3D(dphidtout),
                           AMREX_D_DECL(BL_TO_FORTRAN_3D(uface[0]),
@@ -1002,6 +1002,8 @@ namespace amrex
     debboxcc.refine(reftocoarsest);
 
 #ifdef _OPENMP
+//#pragma omp target map(tofrom:Sborder,dPhiDt,time) map(to:dt,fr_as_crse,fr_as_fine)
+//#pragma omp target  map(to:dt,fr_as_crse,fr_as_fine,iteration)
 #pragma omp parallel
 #endif
     {
@@ -1047,7 +1049,7 @@ namespace amrex
                                        BL_TO_FORTRAN(uface[2])),
                           dx, prob_lo);
 
-        advectDiffMOL4thOrd(time, bx.loVect(), bx.hiVect(),
+        advectDiffMOL4thOrd_F(time, bx.loVect(), bx.hiVect(),
                             BL_TO_FORTRAN_3D(statein), 
                             BL_TO_FORTRAN_3D(dphidtout),
                             AMREX_D_DECL(BL_TO_FORTRAN_3D(uface[0]),
@@ -1136,7 +1138,7 @@ namespace amrex
                                        BL_TO_FORTRAN(uface[2])),
                           dx, prob_lo);
 
-        advectDiffMOL2ndOrd(time, bx.loVect(), bx.hiVect(),
+        advectDiffMOL2ndOrd_F(time, bx.loVect(), bx.hiVect(),
                             BL_TO_FORTRAN_3D(statein), 
                             BL_TO_FORTRAN_3D(dphidtout),
                             AMREX_D_DECL(BL_TO_FORTRAN_3D(uface[0]),
