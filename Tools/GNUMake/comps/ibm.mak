@@ -59,9 +59,9 @@ F90FLAGS += -qmoddir=$(fmoddir) -I $(fmoddir)
 GENERIC_COMP_FLAGS =
 
 
-#ifeq ($(USE_OMP),TRUE)
-#  GENERIC_COMP_FLAGS += -fopenmp
-#endif
+ifeq ($(USE_OMP),TRUE)
+  GENERIC_COMP_FLAGS += -qsmp  -qoffload
+endif
 
 CXXFLAGS += $(GENERIC_COMP_FLAGS)
 CFLAGS   += $(GENERIC_COMP_FLAGS)
@@ -71,6 +71,7 @@ F90FLAGS += $(GENERIC_COMP_FLAGS)
 CPP_PREFIX = -WF,
 
 #override XTRALIBS += 
-override XTRALIBS = $(shell mpifort -showme:link) -L $(OLCF_XLF_ROOT)/lib -lxlf90_r -lm  -lxlfmath
+#override XTRALIBS = $(shell mpifort -showme:link) -L $(OLCF_XLF_ROOT)/lib -lxlf90_r -lm  -lxlfmath
+override XTRALIBS = $(shell mpifort -showme:link) -L /usr/tce/packages/xl/xl-beta-2017.11.28/xlf/15.1.6/lib -lxlf90_r -lm  -lxlfmath
 
 FORTLINK := LOWERCASE
