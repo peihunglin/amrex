@@ -57,7 +57,7 @@ subroutine timeinterprk4_jbb(stage, lo, hi, &
   dtf3 = dt_f*dt_f*dt_f
   dtc2 = dt_c*dt_c
   dtc3 = dt_c*dt_c*dt_c
-  !$omp parallel do private(i,j,k,x,y,z,r2) collapse(2)
+  !$omp parallel do private(i,j,k) collapse(2)
   do k=lo(3),hi(3)
      do j=lo(2),hi(2)
         do i=lo(1),hi(1)
@@ -138,7 +138,7 @@ subroutine timeinterprk3_jbb(stage, lo, hi, &
 
   xi = (tf              - tc_old)/dt_c
 
-  !$omp parallel do private(i,j,k,x,y,z,r2) collapse(2)
+  !$omp parallel do private(i,j,k) collapse(2)
   do k=lo(3),hi(3)
      do j=lo(2),hi(2)
         do i=lo(1),hi(1)
@@ -239,7 +239,7 @@ subroutine timeinterprk4_simplepoly(stage, lo, hi, &
      xi = (tf + dt_f - tc_old)/dt_c;
   endif
 
-  !$omp parallel do private(i,j,k,x,y,z,r2) collapse(2)
+  !$omp parallel do private(i,j,k) collapse(2)
   do k=lo(3),hi(3)
      do j=lo(2),hi(2)
         do i=lo(1),hi(1)
@@ -318,7 +318,7 @@ subroutine timeinterprk3_simplepoly(stage, lo, hi, &
      xi = (tf + 0.5d0*dt_f - tc_old)/dt_c;
   endif
 
-  !$omp parallel do private(i,j,k,x,y,z,r2) collapse(2)
+  !$omp parallel do private(i,j,k) collapse(2)
   do k=lo(3),hi(3)
      do j=lo(2),hi(2)
         do i=lo(1),hi(1)
